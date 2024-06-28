@@ -36,7 +36,9 @@ class UsernameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbar(),
+      appBar: const CustomAppbar(
+        title: 'Enter Username',
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

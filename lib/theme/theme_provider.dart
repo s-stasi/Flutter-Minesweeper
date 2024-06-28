@@ -9,6 +9,9 @@ class ThemeProvider extends ChangeNotifier {
   ThemeProvider({bool isDarkMode = true})
       : _isDarkMode = isDarkMode,
         _themeData = isDarkMode ? _darkTheme : _lightTheme {
+    // get accent color from settings when the app is starting
+    _setAccentColor(GetIt.I<Settings>().accentColor.value);
+
     GetIt.I<Settings>().accentColor.addListener(() {
       _setAccentColor(GetIt.I<Settings>().accentColor.value);
     });

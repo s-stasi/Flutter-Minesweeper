@@ -6,7 +6,8 @@ import 'package:minesweeper/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppbar({super.key})
+  final String title;
+  const CustomAppbar({super.key, required this.title})
       : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
@@ -47,7 +48,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('Enter Username'),
+      title: Text(title),
       actions: [
         IconButton(
           icon: const Icon(Icons.brightness_6),

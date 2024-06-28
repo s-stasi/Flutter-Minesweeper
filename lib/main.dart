@@ -24,7 +24,7 @@ void main() async {
   // Open boxes
   await openHiveBox('settings', limit: true);
 
-  startServices();
+  await startServices();
 
   // Start app
   runApp(const StartApp());

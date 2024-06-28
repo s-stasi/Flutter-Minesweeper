@@ -15,11 +15,14 @@ class Settings {
   void _init() {
     // retrieve settings from memory
     username.value = settingsBox.get('username', defaultValue: '');
-    accentColor.value =
-        settingsBox.get('accentColor', defaultValue: Colors.blueGrey[700]!);
+    print(accentColor.value.value);
+    accentColor.value = Color(settingsBox.get('accentColor',
+        defaultValue: Colors.blueGrey[700]!.value) as int);
+
+    print(accentColor.value.value);
 
     // check if first access
-    _needsInitialization = username.value.isEmpty ? false : true;
+    _needsInitialization = username.value.isEmpty ? true : false;
   }
 
   set setUsername(String newUsername) {
@@ -28,6 +31,7 @@ class Settings {
   }
 
   set setAccentColor(Color newAccentColor) {
+    settingsBox.put('accentColor', newAccentColor.value);
     accentColor.value = newAccentColor;
   }
 
