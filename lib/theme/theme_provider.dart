@@ -31,6 +31,7 @@ class ThemeProvider extends ChangeNotifier {
   void _setAccentColor(Color color) {
     if (_isDarkMode) {
       _themeData = _darkTheme.copyWith(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         colorScheme: _darkTheme.colorScheme.copyWith(secondary: color),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -51,6 +52,7 @@ class ThemeProvider extends ChangeNotifier {
       );
     } else {
       _themeData = _lightTheme.copyWith(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         colorScheme: _lightTheme.colorScheme.copyWith(secondary: color),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -74,6 +76,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   static final ThemeData _darkTheme = ThemeData(
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.dark,
     primarySwatch: Colors.blueGrey,
     colorScheme: ColorScheme.dark(
@@ -96,6 +99,7 @@ class ThemeProvider extends ChangeNotifier {
   );
 
   static final ThemeData _lightTheme = ThemeData(
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
     colorScheme: ColorScheme.light(

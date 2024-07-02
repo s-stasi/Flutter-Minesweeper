@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:minesweeper/screen/home_page/minesweeper_widget.dart';
 import 'package:minesweeper/services/settings.dart';
 import 'package:minesweeper/widgets/custom_appbar.dart';
 
@@ -16,7 +17,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: CustomAppbar(
         title: GetIt.I<Settings>().username.value,
+        showDifficultyDropdown: true,
       ),
+      body: const MinesweeperScreen(),
     );
   }
 }

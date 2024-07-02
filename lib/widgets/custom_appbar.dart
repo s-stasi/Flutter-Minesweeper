@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get_it/get_it.dart';
+import 'package:minesweeper/hive_adapters/difficulty.dart';
 import 'package:minesweeper/services/settings.dart';
 import 'package:minesweeper/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const CustomAppbar({super.key, required this.title})
+  final bool? showDifficultyDropdown;
+  const CustomAppbar(
+      {super.key, required this.title, this.showDifficultyDropdown})
       : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
@@ -48,7 +51,22 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      title: Row(children: [
+        if (showDifficultyDropdown != null && showDifficultyDropdown!)
+          DropdownButton<Difficulty>(
+            value: GetIt.I<Settings>().difficulty.value,
+            items: Difficulty.values
+                .map((difficulty) => DropdownMenuItem<Difficulty>(
+                      value: difficulty,
+                      child: Text(difficulty.description),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              GetIt.I<Settings>().changeDifficulty(value);
+            },
+          ),
+        Text(title),
+      ]),
       actions: [
         IconButton(
           icon: const Icon(Icons.brightness_6),

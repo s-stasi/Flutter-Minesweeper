@@ -1,0 +1,174 @@
+@startuml
+set namespaceSeparator ::
+
+class "minesweeper::start_app.dart::StartApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "minesweeper::start_app.dart::StartApp"
+
+class "minesweeper::theme::theme_provider.dart::ThemeProvider" {
+  -ThemeData _themeData
+  -bool _isDarkMode
+  {static} -ThemeData _darkTheme
+  {static} -ThemeData _lightTheme
+  +ThemeData themeData
+  +void toggleTheme()
+  -void _setAccentColor()
+}
+
+"minesweeper::theme::theme_provider.dart::ThemeProvider" o-- "flutter::src::material::theme_data.dart::ThemeData"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "minesweeper::theme::theme_provider.dart::ThemeProvider"
+
+class "minesweeper::screen::home_page::minesweeper_widget.dart::MinesweeperScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "minesweeper::screen::home_page::minesweeper_widget.dart::MinesweeperScreen"
+
+class "minesweeper::screen::home_page::minesweeper_widget.dart::MineFieldWidget" {
+  +MineField mineField
+  +Widget build()
+}
+
+"minesweeper::screen::home_page::minesweeper_widget.dart::MineFieldWidget" o-- "minesweeper::services::game::grid.dart::MineField"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "minesweeper::screen::home_page::minesweeper_widget.dart::MineFieldWidget"
+
+class "minesweeper::screen::home_page::minesweeper_widget.dart::MineCellWidget" {
+  +MineField field
+  +Widget build()
+}
+
+"minesweeper::screen::home_page::minesweeper_widget.dart::MineCellWidget" o-- "minesweeper::services::game::grid.dart::MineField"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "minesweeper::screen::home_page::minesweeper_widget.dart::MineCellWidget"
+
+class "minesweeper::screen::home_page::home_screen.dart::HomeScreen" {
+  +State<HomeScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "minesweeper::screen::home_page::home_screen.dart::HomeScreen"
+
+class "minesweeper::screen::home_page::home_screen.dart::_HomeScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "minesweeper::screen::home_page::home_screen.dart::_HomeScreenState"
+
+class "minesweeper::screen::initialize::username_screen.dart::UsernameScreen" {
+  -TextEditingController _usernameController
+  -void _submitUsername()
+  +Widget build()
+}
+
+"minesweeper::screen::initialize::username_screen.dart::UsernameScreen" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "minesweeper::screen::initialize::username_screen.dart::UsernameScreen"
+
+class "minesweeper::hive_adapters::difficulty.dart::Difficulty" {
+  +int index
+  {static} +List<Difficulty> values
+  {static} +Difficulty easy
+  {static} +Difficulty medium
+  {static} +Difficulty hard
+}
+
+"minesweeper::hive_adapters::difficulty.dart::Difficulty" o-- "minesweeper::hive_adapters::difficulty.dart::Difficulty"
+"dart::core::Enum" <|-- "minesweeper::hive_adapters::difficulty.dart::Difficulty"
+
+class "minesweeper::hive_adapters::difficulty.dart::DifficultyAdapter" {
+  +int typeId
+  +int hashCode
+  +Difficulty read()
+  +void write()
+  +bool ==()
+}
+
+"hive::hive.dart::TypeAdapter" <|-- "minesweeper::hive_adapters::difficulty.dart::DifficultyAdapter"
+
+class "minesweeper::services::game::game_service.dart::GameSettings" {
+  -int _rows
+  -int _columns
+  -int _bombs
+  +int rows
+  +int columns
+  +int bombs
+}
+
+class "minesweeper::services::game::game_service.dart::GameService" {
+  {static} +Map<Difficulty, GameSettings> gameSettings
+  +MineField field
+}
+
+"minesweeper::services::game::game_service.dart::GameService" o-- "minesweeper::services::game::grid.dart::MineField"
+
+class "minesweeper::services::game::grid.dart::MineCell" {
+  -bool _hasBomb
+  -bool _isCovered
+  -bool _isFlagged
+  -int _adjacentBombs
+  -int _index
+  +bool hasBomb
+  +bool isCovered
+  +bool isFlagged
+  +int adjacentBombs
+  +int index
+  +void uncover()
+  +void uiUncover()
+  +void toggleFlag()
+  +void setAdjacentBombs()
+  +String toString()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "minesweeper::services::game::grid.dart::MineCell"
+
+class "minesweeper::services::game::grid.dart::MineField" {
+  +List<MineCell> field
+  +int x
+  +int y
+  {static} +MineField? generate()
+  +void calculateAdjacentBombs()
+  +void uncoverCell()
+  +String toString()
+}
+
+class "minesweeper::services::settings.dart::Settings" {
+  +ValueNotifier<String> username
+  +ValueNotifier<Color> accentColor
+  +ValueNotifier<Difficulty> difficulty
+  {static} +Box<dynamic> settingsBox
+  -bool _needsInitialization
+  +String setUsername
+  +Color setAccentColor
+  +bool needsInitialization
+  -void _init()
+}
+
+"minesweeper::services::settings.dart::Settings" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<String>"
+"minesweeper::services::settings.dart::Settings" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<Color>"
+"minesweeper::services::settings.dart::Settings" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<Difficulty>"
+"minesweeper::services::settings.dart::Settings" o-- "hive::hive.dart::Box<dynamic>"
+"minesweeper::services::settings.dart::Settings" o-- "dart::ui::Color"
+
+class "minesweeper::services::settings.dart::Difficulty" {
+  +int index
+  {static} +List<Difficulty> values
+  {static} +Difficulty easy
+  {static} +Difficulty medium
+  {static} +Difficulty hard
+}
+
+"minesweeper::services::settings.dart::Difficulty" o-- "minesweeper::services::settings.dart::Difficulty"
+"dart::core::Enum" <|-- "minesweeper::services::settings.dart::Difficulty"
+
+class "minesweeper::widgets::custom_appbar.dart::CustomAppbar" {
+  +String title
+  +Size preferredSize
+  -void _showColorPicker()
+  +Widget build()
+}
+
+"minesweeper::widgets::custom_appbar.dart::CustomAppbar" o-- "dart::ui::Size"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "minesweeper::widgets::custom_appbar.dart::CustomAppbar"
+"flutter::src::widgets::preferred_size.dart::PreferredSizeWidget" <|-- "minesweeper::widgets::custom_appbar.dart::CustomAppbar"
+
+
+@enduml

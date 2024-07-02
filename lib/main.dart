@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:minesweeper/hive_adapters/difficulty.dart';
+import 'package:minesweeper/services/game/game_service.dart';
 import 'package:minesweeper/services/settings.dart';
 import 'package:minesweeper/start_app.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +13,9 @@ import 'package:path_provider/path_provider.dart';
 void main() async {
   // Initialize widgets bindings
   WidgetsFlutterBinding.ensureInitialized;
+
+  // register hive adapters
+  Hive.registerAdapter(DifficultyAdapter());
 
   // Initialize hive boxes
   if (kIsWeb) {
@@ -33,6 +38,7 @@ void main() async {
 /// Starts services
 Future<void> startServices() async {
   GetIt.I.registerSingleton<Settings>(Settings());
+  GetIt.I.registerSingleton<GameService>(GameService());
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
